@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://bveq7a16ob8of"]
+
+[ext_resource type="Script" uid="uid://bv7bfxmfaya6o" path="res://Scripts/enemy.gd" id="1_hghv2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ql73s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0s4m"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ql73s"]
+material = SubResource("StandardMaterial3D_v0s4m")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sdhfp"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_oeq8l"]
+material = SubResource("StandardMaterial3D_sdhfp")
+size = Vector3(0.7, 0.3, 0.8)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ql73s"]
+radius = 10.0
+
+[node name="enemy" type="CharacterBody3D" unique_id=736415656]
+script = ExtResource("1_hghv2")
+
+[node name="hitbox" type="CollisionShape3D" parent="." unique_id=1562421127]
+shape = SubResource("CapsuleShape3D_ql73s")
+
+[node name="body" type="MeshInstance3D" parent="." unique_id=1550557268]
+mesh = SubResource("CapsuleMesh_ql73s")
+
+[node name="Glasses" type="MeshInstance3D" parent="body" unique_id=1523786173]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.472, -0.17)
+mesh = SubResource("BoxMesh_oeq8l")
+
+[node name="NavAgent" type="NavigationAgent3D" parent="." unique_id=967670946]
+avoidance_enabled = true
+height = 2.0
+radius = 1.0
+
+[node name="IdleTimer" type="Timer" parent="." unique_id=1841080320]
+wait_time = 5.0
+one_shot = true
+
+[node name="DetectArea" type="Area3D" parent="." unique_id=869499296]
+
+[node name="Area" type="CollisionShape3D" parent="DetectArea" unique_id=755080963]
+shape = SubResource("SphereShape3D_ql73s")
+
+[node name="DetectRay" type="RayCast3D" parent="." unique_id=589333319]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4738672, 0)
+target_position = Vector3(0, 0, -10)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="StateLabel" type="Label3D" parent="." unique_id=1656604983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0879692, 0)
+billboard = 1
+text = "State"
+
+[node name="RotationMark" type="Marker3D" parent="." unique_id=1827350810]
+
+[connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]
